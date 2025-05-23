@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>購物車</title>
+</head>
+<body>
+    <h1>購物車</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>菜品名稱</th>
+                <th>數量</th>
+                <th>單價</th>
+                <th>小計</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.total_price }}</td>
+                <td>
+                    <!-- 刪除按鈕 -->
+                    <form action="/cart/delete/{{ item.id }}" method="POST" style="display:inline;">
+                        <button type="submit">刪除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>總金額: ${{ total_amount }}</h2>
+
+    <!-- 確認下單按鈕，跳轉到收貨頁面 -->
+    <form action="/place_order" method="POST">
+        <input type="hidden" name="total_amount" value="{{ total_amount }}">
+        <button type="submit">確認下單</button>
+    </form>
+
+    <a href="/restaurants">返回餐廳列表</a>
+</body>
+</html>

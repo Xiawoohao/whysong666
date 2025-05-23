@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">評價訂單 #{{ order_id }}</h2>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('review_order', order_id=order_id) }}" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">評分</label>
+                            <div class="rating">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" 
+                                           id="rating5" value="5" required>
+                                    <label class="form-check-label" for="rating5">5星 - 非常滿意</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" 
+                                           id="rating4" value="4">
+                                    <label class="form-check-label" for="rating4">4星 - 滿意</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" 
+                                           id="rating3" value="3">
+                                    <label class="form-check-label" for="rating3">3星 - 普通</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" 
+                                           id="rating2" value="2">
+                                    <label class="form-check-label" for="rating2">2星 - 不滿意</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="rating" 
+                                           id="rating1" value="1">
+                                    <label class="form-check-label" for="rating1">1星 - 非常不滿意</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="review_text" class="form-label">評價內容</label>
+                            <textarea class="form-control" id="review_text" name="review_text" 
+                                      rows="3" placeholder="請分享您的用餐體驗..."></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('customer_order_list') }}" 
+                               class="btn btn-secondary">返回</a>
+                            <button type="submit" class="btn btn-primary">提交評價</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

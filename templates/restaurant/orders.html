@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">訂單管理</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>訂單編號</th>
+                            <th>顧客</th>
+                            <th>金額</th>
+                            <th>狀態</th>
+                            <th>下單時間</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>${{ "%.2f"|format(order.total_amount) }}</td>
+                            <td>
+                                <span class="badge {% if order.status == '待確認' %}bg-warning
+                                      {% elif order.status == '待接單' %}bg-info
+                                      {% elif order.status == '配送中' %}bg-primary
+                                      {% elif order.status == '已送達' %}bg-success
+                                      {% elif order.status == '已完成' %}bg-secondary
+                                      {% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+                            <td>{{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>
+                                {% if order.status == '待確認' %}
+                                    <a href="{{ url_for('confirm_order', order_id=order.id) }}" 
+                                       class="btn btn-sm btn-success">接受訂單</a>
+                                    <form action="{{ url_for('reject_order', order_id=order.id) }}" 
+                                          method="POST" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-danger" 
+                                                onclick="return confirm('確定要拒絕此訂單嗎？');">
+                                            拒絕訂單
+                                        </button>
+                                    </form>
+                                {% elif order.status == '待接單' %}
+                                    <span class="text-muted">等待外送員接單</span>
+                                {% elif order.status == '配送中' %}
+                                    <span class="text-muted">外送員配送中</span>
+                                {% elif order.status == '已送達' %}
+                                    <span class="text-muted">等待顧客確認</span>
+                                {% elif order.status == '已完成' %}
+                                    <span class="text-success">訂單已完成</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

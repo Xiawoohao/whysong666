@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">購物車</h2>
+    
+    {% if cart_items %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>商品名稱</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.total) }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_from_cart', cart_item_id=item.id) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3" class="text-end"><strong>總計：</strong></td>
+                    <td colspan="2"><strong>${{ "%.2f"|format(total_amount) }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="text-end mt-3">
+            <a href="{{ url_for('customer_restaurant_list') }}" class="btn btn-secondary">繼續購物</a>
+            <form action="{{ url_for('create_order') }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-primary">結帳</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        購物車是空的。<a href="{{ url_for('customer_restaurant_list') }}">去逛逛吧！</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

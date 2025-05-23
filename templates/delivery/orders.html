@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">外送訂單</h2>
+    
+    {% if orders %}
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">訂單 #{{ order.id }}</h5>
+                    <p class="card-text">
+                        <strong>餐廳：</strong>{{ order.restaurant_name }}<br>
+                        <strong>餐廳地址：</strong>{{ order.restaurant_address }}<br>
+                        <strong>顧客：</strong>{{ order.customer_name }}<br>
+                        <strong>送餐地址：</strong>{{ order.customer_address }}<br>
+                        <strong>金額：</strong>${{ "%.2f"|format(order.total_amount) }}<br>
+                        <strong>狀態：</strong>{{ order.status }}<br>
+                        <strong>建立時間：</strong>{{ order.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </p>
+                    
+                    {% if order.status == '待接單' %}
+                    <form action="{{ url_for('accept_order', order_id=order.id) }}" method="POST">
+                        <button type="submit" class="btn btn-primary">接單</button>
+                    </form>
+                    {% elif order.status == '配送中' and order.delivery_person_id == session.user_id %}
+                    <form action="{{ url_for('complete_delivery', order_id=order.id) }}" method="POST">
+                        <button type="submit" class="btn btn-success">完成配送</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        目前沒有待配送的訂單。
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

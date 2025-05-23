@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">結算管理</h2>
+    
+    <!-- 餐廳結算 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h3>餐廳結算</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>餐廳名稱</th>
+                            <th>訂單數量</th>
+                            <th>總營業額</th>
+                            <th>平台抽成</th>
+                            <th>應付金額</th>
+                            <th>結算狀態</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for settlement in restaurant_settlements %}
+                        <tr>
+                            <td>{{ settlement.restaurant_name }}</td>
+                            <td>{{ settlement.order_count }}</td>
+                            <td>${{ "%.2f"|format(settlement.total_amount) }}</td>
+                            <td>${{ "%.2f"|format(settlement.platform_fee) }}</td>
+                            <td>${{ "%.2f"|format(settlement.payable_amount) }}</td>
+                            <td>{{ settlement.status }}</td>
+                            <td>
+                                {% if settlement.status == '待結算' %}
+                                    <a href="{{ url_for('settle_restaurant', settlement_id=settlement.id) }}" 
+                                       class="btn btn-sm btn-success">結算</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 外送員結算 -->
+    <div class="card">
+        <div class="card-header">
+            <h3>外送員結算</h3>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>外送員姓名</th>
+                            <th>配送訂單數</th>
+                            <th>配送費總額</th>
+                            <th>結算狀態</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for settlement in delivery_settlements %}
+                        <tr>
+                            <td>{{ settlement.delivery_person_name }}</td>
+                            <td>{{ settlement.delivery_count }}</td>
+                            <td>${{ "%.2f"|format(settlement.delivery_fee_total) }}</td>
+                            <td>{{ settlement.status }}</td>
+                            <td>
+                                {% if settlement.status == '待結算' %}
+                                    <a href="{{ url_for('settle_delivery', settlement_id=settlement.id) }}" 
+                                       class="btn btn-sm btn-success">結算</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

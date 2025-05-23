@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">更新送餐地址</h2>
+    
+    <form method="POST" action="{{ url_for('update_delivery_address') }}">
+        <div class="mb-3">
+            <label for="delivery_address" class="form-label">送餐地址</label>
+            <input type="text" class="form-control" id="delivery_address" name="delivery_address" required>
+        </div>
+        <button type="submit" class="btn btn-primary">更新地址</button>
+    </form>
+</div>
+{% endblock %}

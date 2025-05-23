@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>結算管理</h2>
+    
+    <!-- 待結算訂單 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h4>待結算訂單</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>訂單ID</th>
+                            <th>建立時間</th>
+                            <th>訂單金額</th>
+                            <th>餐廳</th>
+                            <th>外送員</th>
+                            <th>顧客</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in pending_settlements %}
+                        <tr>
+                            <td>{{ order.order_id }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>${{ order.total_amount }}</td>
+                            <td>{{ order.restaurant_name }}</td>
+                            <td>{{ order.delivery_person_name }}</td>
+                            <td>{{ order.customer_name }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <form action="{{ url_for('process_settlement') }}" method="post" class="me-2">
+                                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                        <input type="hidden" name="settlement_type" value="restaurant">
+                                        <button type="submit" class="btn btn-primary btn-sm">結算餐廳</button>
+                                    </form>
+                                    <form action="{{ url_for('process_settlement') }}" method="post">
+                                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                        <input type="hidden" name="settlement_type" value="delivery">
+                                        <button type="submit" class="btn btn-success btn-sm">結算外送員</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 結算歷史記錄 -->
+    <div class="card">
+        <div class="card-header">
+            <h4>結算歷史記錄</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>結算ID</th>
+                            <th>結算時間</th>
+                            <th>結算金額</th>
+                            <th>結算類型</th>
+                            <th>收款方</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for settlement in settlement_history %}
+                        <tr>
+                            <td>{{ settlement.id }}</td>
+                            <td>{{ settlement.settlement_date }}</td>
+                            <td>${{ settlement.amount }}</td>
+                            <td>
+                                {% if settlement.settlement_type == 'restaurant' %}
+                                    餐廳結算
+                                {% else %}
+                                    外送員結算
+                                {% endif %}
+                            </td>
+                            <td>{{ settlement.recipient_name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

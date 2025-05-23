@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>收貨</title>
+</head>
+<body>
+    <h1>訂單 #{{ order_id }} - 收貨頁面</h1>
+
+    <h2>訂單狀態: {{ order_status }}</h2>  <!-- 顯示訂單狀態 -->
+
+    <h2>確認收貨</h2>
+    <form action="/shipping/{{ order_id }}" method="POST">
+        <button type="submit">確認收貨</button>
+    </form>
+
+    <h3>請留下您的評價：</h3>
+    <form action="/shipping/{{ order_id }}" method="POST">
+        <textarea name="review_text" rows="4" cols="50" placeholder="請輸入您的評價..."></textarea><br><br>
+        <label for="rating">評分：</label>
+        <select name="rating">
+            <option value="1">1 - 很差</option>
+            <option value="2">2 - 還好</option>
+            <option value="3">3 - 一般</option>
+            <option value="4">4 - 不錯</option>
+            <option value="5">5 - 優秀</option>
+        </select><br><br>
+        <button type="submit">提交評價</button>
+    </form>
+
+    <a href="/restaurants">返回餐廳列表</a>
+</body>
+</html>

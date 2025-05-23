@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">歡迎來到外送平台</h1>
+            
+            {% if not session.get('user_id') %}
+            <div class="mb-4">
+                <p class="lead">請先登入以使用我們的服務</p>
+                <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">登入</a>
+            </div>
+            {% else %}
+            <div class="mb-4">
+                <p class="lead">您好，{{ session.get('name') }}！</p>
+                {% if session.get('role') == 'customer' %}
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{{ url_for('customer_restaurant_list') }}" class="btn btn-primary btn-lg">瀏覽餐廳</a>
+                        <a href="{{ url_for('customer_cart_list') }}" class="btn btn-success btn-lg">查看購物車</a>
+                        <a href="{{ url_for('customer_order_list') }}" class="btn btn-info btn-lg">我的訂單</a>
+                    </div>
+                {% elif session.get('role') == 'restaurant_owner' %}
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{{ url_for('restaurant_menu_list') }}" class="btn btn-primary btn-lg">管理菜單</a>
+                        <a href="{{ url_for('restaurant_order_list') }}" class="btn btn-success btn-lg">訂單管理</a>
+                    </div>
+                {% elif session.get('role') == 'delivery_person' %}
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{{ url_for('delivery_order_list') }}" class="btn btn-primary btn-lg">查看待送訂單</a>
+                    </div>
+                {% elif session.get('role') == 'admin' %}
+                    <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                        <a href="{{ url_for('admin_settlement_list') }}" class="btn btn-primary btn-lg">結算管理</a>
+                    </div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

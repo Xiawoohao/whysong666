@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>餐廳列表</title>
+</head>
+<body>
+    <h1>餐廳列表</h1>
+    <ul>
+        {% for restaurant in restaurants %}
+            <li>
+                {{ restaurant.name }}
+                <a href="/menu/{{ restaurant.id }}">
+                    <button>查看菜單</button>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
